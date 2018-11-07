@@ -12,12 +12,21 @@ namespace Sistem_Ventas.Controllers
 {
     public class HomeController : Controller
     {
+        //campo serviceProvider
+        // al poner el campo serviceProvider ya funciona la aplicación antes no me funcionaba porqué no ponia este campo
+        IServiceProvider _serviceProvider;
+        private readonly IServiceProvider serviceProvider;
+
         public HomeController(IServiceProvider serviceProvider)
         {
-            CreateRoles(serviceProvider);
+            _serviceProvider = serviceProvider;
+            
         }
-        public IActionResult Index()
+        // aqui lo ponga como lo ponga nofunciona como me has sugerido en el video 8 del curso de sistema de ventas
+        public async Task<IActionResult> Index()
         {
+            //cuando cargamos la página con el Index() se ejecuta el método CreateRoles()
+            await CreateRoles(serviceProvider);
             return View();
         }
 
@@ -54,6 +63,7 @@ namespace Sistem_Ventas.Controllers
                 var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 var UserManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
                 //a la hora de crear los roles, quiero introducir SuperAdmin, Admin, Manager por zona, User
+                // aqui quiero crear otros roles de usuarios para cuando acabe con el proyecto
                 String[] rolesName = { "Admin", "User" };
                 foreach (var item in rolesName)
                 {

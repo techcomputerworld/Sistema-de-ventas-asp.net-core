@@ -17,9 +17,13 @@ namespace Sistem_Ventas
 {
     public class Startup
     {
+        
+
         public Startup(IConfiguration configuration)
         {
+           
             Configuration = configuration;
+            
         }
 
         public IConfiguration Configuration { get; }
@@ -37,11 +41,12 @@ namespace Sistem_Ventas
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            //services.AddDefaultIdentity<IdentityUser>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.adddefaultidentity<identityuser>()
+            //    .addentityframeworkstores<applicationdbcontext>();
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,5 +76,6 @@ namespace Sistem_Ventas
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+        
     }
 }
