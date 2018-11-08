@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,18 +16,19 @@ namespace Sistem_Ventas.Controllers
         //campo serviceProvider
         // al poner el campo serviceProvider ya funciona la aplicación antes no me funcionaba porqué no ponia este campo
         IServiceProvider _serviceProvider;
-        private readonly IServiceProvider serviceProvider;
+        
 
         public HomeController(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
+            //ejecutarTareaAsync();
             
         }
         // aqui lo ponga como lo ponga nofunciona como me has sugerido en el video 8 del curso de sistema de ventas
         public async Task<IActionResult> Index()
         {
             //cuando cargamos la página con el Index() se ejecuta el método CreateRoles()
-            await CreateRoles(serviceProvider);
+            await CreateRoles(_serviceProvider);
             return View();
         }
 
@@ -61,7 +63,7 @@ namespace Sistem_Ventas.Controllers
             try
             {
                 var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                var UserManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
                 //a la hora de crear los roles, quiero introducir SuperAdmin, Admin, Manager por zona, User
                 // aqui quiero crear otros roles de usuarios para cuando acabe con el proyecto
                 String[] rolesName = { "Admin", "User" };
@@ -75,6 +77,9 @@ namespace Sistem_Ventas.Controllers
                         await roleManager.CreateAsync(new IdentityRole(item));
                     }
                 }
+                var user = await userManager.FindByIdAsync("9c059b10-1155-4177-bfb0-ef31fdfe8767");
+                var addRole = await userManager.AddToRoleAsync(user, "Admin");
+                
             }
             catch (Exception ex)
             {
@@ -82,6 +87,21 @@ namespace Sistem_Ventas.Controllers
             }
             
 
+        }
+        private async void ejecutarTareaAsync()
+        {
+            var data = await Tareas();
+            String Tarea = "Ahora ejectaremos las demas lineas de código porque la tarea a finalizado";
+
+
+        }
+        //método que va a sincronizarse y que ejecutara una tarea
+        private async Task<String> Tareas()
+        {
+            //Pausa de 5 segundos
+            Thread.Sleep(5 * 1000);
+            String tarea = "Tarea finalizada";
+            return tarea;
         }
     }
 }
